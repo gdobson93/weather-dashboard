@@ -1,0 +1,53 @@
+#top-header {
+  font-size: 50px;
+  padding: 20px;
+}
+
+
+/* Footer */
+
+footer {
+  flex: 0 0 auto;
+  padding: 15px 0 25px;
+  color: #fff;
+  text-align: center;
+  background: #343a40;
+  border-top: 8px solid white;
+  box-shadow: 0 5px 8px 5px #333;
+  width: 100%;
+  line-height: 5px;
+  text-size-adjust: 10px;
+  bottom: 0;
+  position: absolute;
+}
+
+footer a {
+  color: white;
+}
+
+footer a:visited {
+  color: lightgrey;
+}
+
+footer a:hover {
+  color: darkgrey;
+  text-decoration: none;
+}
+
+
+@media screen and (max-width: 600px) {
+  header,
+  .row {
+    width: 100% !important;
+  }
+  .card-container {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .btn-lg {
+    font-size: 10px !important;
+  }
+  .h1 {
+    font-size: 3.5rem !important;
+  }
+}
