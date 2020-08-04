@@ -3,6 +3,13 @@
   padding: 20px;
 }
 
+#clear-btn {
+  border: solid 2px;
+  margin-top: 10px;
+  background-color: #343a40;
+  color: white;
+}
+
 
 /* Footer */
 
@@ -32,6 +39,10 @@ footer a:visited {
 footer a:hover {
   color: darkgrey;
   text-decoration: none;
+}
+
+.socialmedialinks {
+  padding-bottom: 10px;
 }
 
 

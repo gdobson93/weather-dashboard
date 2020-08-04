@@ -37,25 +37,30 @@ $(document).ready(function() {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        // create history link for this search
+        
+        //Check API data is pulling
+        console.log("weather works");
         console.log(data);
-        console.log(data.main.temp);
+
         if (history.indexOf(searchValue) === -1) {
           history.push(searchValue);
           window.localStorage.setItem("history", JSON.stringify(history));
     
           makeRow(searchValue);
         }
-        var currentWeather = `<div class="card" style="width: 18rem;">
+        var currentWeather = `<div class="card bg-light" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">${data.name}</h5>
           <h6 class="card-subtitle mb-2 text-muted">Temperature: ${data.main.temp}</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text">Humidity: ${data.main.humidity}</p>
+          <p class="card-text">Wind Speed: ${data.wind.speed}</p>
+          <p class="card-text">Humidity: ${data.main.humidity}</p>
         </div>
       </div>`;
         $("#today").html(currentWeather);
-        // temperal literal codes exactly what you code inside it ``
-        // clear any old content
+
+        $("#today").empty;
+        $("#forecast").empty;
 
         // create html content for current weather
 
@@ -75,8 +80,12 @@ $(document).ready(function() {
       url: forecastURL + searchValue + imperialUnits + apiWeatherKey,
       dataType: "json",
       success: function(data) {
+
+        //check to make sure API data is pulling
+        console.log("forecast works");
+        console.log(data);
         // overwrite any existing content with title and empty row
-        console.log("forecast api");
+        
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
           // only look at forecasts around 3:00pm
@@ -98,7 +107,11 @@ $(document).ready(function() {
       url: uvURL + apiWeatherKey + "&lat=" + lat + "&lon=" + lon,
       dataType: "json",
       success: function(data) {
+        
+        // check to make sure API data is pulling
+        console.log("uv works");
         console.log(data);
+
         var uv = $("<p>").text("UV Index: ");
         var btn = $("<span>").addClass("btn btn-sm").text(data.value);
         
@@ -109,7 +122,6 @@ $(document).ready(function() {
     });
   }
 
-  // get current history, if any
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
 
   if (history.length > 0) {
@@ -119,4 +131,10 @@ $(document).ready(function() {
   for (var i = 0; i < history.length; i++) {
     makeRow(history[i]);
   }
+});
+
+$("#clear-btn").on("click", function () {
+  console.clear();
+  localStorage.clear();
+  window.location.reload();
 });
