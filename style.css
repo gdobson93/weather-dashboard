@@ -3,13 +3,40 @@
   padding: 20px;
 }
 
+.card-title {
+  font-size: 30px;
+}
+
+.card-forecast {
+  display: inline-flex;
+}
+
 #clear-btn {
   border: solid 2px;
-  margin-top: 10px;
+  margin: 10px 10px 10px 0;
   background-color: #343a40;
   color: white;
 }
 
+.low {
+  background-color: green;
+}
+
+.moderate {
+  background-color: yellow;
+}
+
+.high {
+  background-color: orange;
+}
+
+.very-high {
+    background-color: red;
+}
+
+.extremely-high {
+  background-color: violet;
+}
 
 /* Footer */
 
@@ -22,10 +49,11 @@ footer {
   border-top: 8px solid white;
   box-shadow: 0 5px 8px 5px #333;
   width: 100%;
-  line-height: 5px;
+  line-height: 3px;
   text-size-adjust: 10px;
   bottom: 0;
   position: absolute;
+  display: inline;
 }
 
 footer a {

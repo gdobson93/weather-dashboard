@@ -37,11 +37,9 @@ $(document).ready(function() {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        
-        //Check API data is pulling
-        console.log("weather works");
+        // create history link for this search
+        console.log("current weather works")
         console.log(data);
-
         if (history.indexOf(searchValue) === -1) {
           history.push(searchValue);
           window.localStorage.setItem("history", JSON.stringify(history));
@@ -51,20 +49,13 @@ $(document).ready(function() {
         var currentWeather = `<div class="card bg-light" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">${data.name}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Temperature: ${data.main.temp}</h6>
-          <p class="card-text">Humidity: ${data.main.humidity}</p>
-          <p class="card-text">Wind Speed: ${data.wind.speed}</p>
-          <p class="card-text">Humidity: ${data.main.humidity}</p>
+          <p class="card-text">Temperature: ${data.main.temp}°F</p>
+          <p class="card-text">Humidity: ${data.main.humidity}%</p>
+          <p class="card-text">Wind Speed: ${data.wind.speed}MPH</p>
         </div>
       </div>`;
+
         $("#today").html(currentWeather);
-
-        $("#today").empty;
-        $("#forecast").empty;
-
-        // create html content for current weather
-
-        // merge and add to page
         
         // call follow-up api endpoints
         getForecast(searchValue);
@@ -72,7 +63,38 @@ $(document).ready(function() {
       }
     });
   }
-  
+
+/**
+ * generate html for five day forecast
+ * @param {string} name 
+ * @param {string} temp 
+ * @param {string} humidity 
+ * @param {string} speed 
+ */
+function genForecastHTML(name, temp, humidity, speed) {
+  var forecastWeather = `<div class="card-forecast bg-light" style="width: 20%;">
+        <div class="card-body">
+          <h5 class="card-title">${name}</h5>
+          <p class="card-text">Temperature: ${temp}°F</p>
+          <p class="card-text">Humidity: ${humidity}%</p>
+          <p class="card-text">Wind Speed: ${speed}MPH</p>
+        </div>
+      </div>`;
+
+      return forecastWeather;
+}
+
+//getforecast variable to use ES6 w / upticks
+
+ /*var forecastWeather = `<div class="card bg-light" style="width: 50px;">
+        <div class="card-body">
+          <h5 class="card-title">${data.city.name}</h5>
+          <p class="card-text">Temperature: ${data.list[0].main.temp}°F</p>
+          <p class="card-text">Humidity: ${data.list[0].main.humidity}%</p>
+          <p class="card-text">Wind Speed: ${data.list[0].wind.speed}MPH</p>
+        </div>
+      </div>`;*/
+
   function getForecast(searchValue) {
     var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
     $.ajax({
@@ -80,20 +102,21 @@ $(document).ready(function() {
       url: forecastURL + searchValue + imperialUnits + apiWeatherKey,
       dataType: "json",
       success: function(data) {
-
-        //check to make sure API data is pulling
+        // overwrite any existing content with title and empty row
         console.log("forecast works");
         console.log(data);
-        // overwrite any existing content with title and empty row
+        console.log(data.list);
         
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
           // only look at forecasts around 3:00pm
           if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
             // create html elements for a bootstrap card
-            
+            console.log(data);
 
-            // merge together and put on page
+            var fiveDayForecast = genForecastHTML(data.city.name, data.list[0].main.temp, data.list[0].main.humidity, data.list[0].wind.speed);
+
+      $("#forecast").append(fiveDayForecast);
           }
         }
       }
@@ -107,21 +130,33 @@ $(document).ready(function() {
       url: uvURL + apiWeatherKey + "&lat=" + lat + "&lon=" + lon,
       dataType: "json",
       success: function(data) {
-        
-        // check to make sure API data is pulling
-        console.log("uv works");
+        //checking if api works
+        console.log("uv index works");
         console.log(data);
 
         var uv = $("<p>").text("UV Index: ");
-        var btn = $("<span>").addClass("btn btn-sm").text(data.value);
+        var uvBtn = $("<span>").addClass("uv-btn btn-sm").text(data.value);
         
         // change color depending on uv value
-        
-        $("#today .card-body").append(uv.append(btn));
+
+        if (uvBtn > 0 && uvBtn <= 2.99) {
+          uvBtn.addClass("low");
+        } else if (uvBtn >= 3 && uvBtn <= 5.99) {
+          uvBtn.addClass("moderate");
+        } else if (uvBtn >= 6 && uvBtn <= 7.99) {
+          uvBtn.addClass("high");
+        }else if (uvBtn >= 8 && uvBtn <= 10.99) {
+          uvBtn.addClass("very-high");
+        } else if (uvBtn >= 11) {
+          uvBtn.addClass("extremely-high");
+        }
+        $("#today .card-text").append(uv.append(uvBtn));
+        $("#forecast .card-text").append(uv.append(uvBtn));
       }
     });
   }
 
+  // get current history, if any
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
 
   if (history.length > 0) {
@@ -137,4 +172,4 @@ $("#clear-btn").on("click", function () {
   console.clear();
   localStorage.clear();
   window.location.reload();
-});
+})
