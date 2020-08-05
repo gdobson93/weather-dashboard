@@ -1,3 +1,17 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+main {
+  flex-grow: 1;
+}
+
 #top-header {
   font-size: 50px;
   padding: 20px;
@@ -9,6 +23,9 @@
 
 .card-forecast {
   display: inline-flex;
+  font-size: 14px;
+  border: solid 1px;
+  margin: auto;
 }
 
 #clear-btn {
@@ -46,14 +63,14 @@ footer {
   color: #fff;
   text-align: center;
   background: #343a40;
-  border-top: 8px solid white;
+  border-top: 4px solid white;
   box-shadow: 0 5px 8px 5px #333;
   width: 100%;
-  line-height: 3px;
+  line-height: 2px;
   text-size-adjust: 10px;
-  bottom: 0;
+  /*bottom: 0;
   position: absolute;
-  display: inline;
+  display: inline;*/
 }
 
 footer a {

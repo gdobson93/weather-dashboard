@@ -40,6 +40,8 @@ $(document).ready(function() {
         // create history link for this search
         console.log("current weather works")
         console.log(data);
+        console.log(moment(data.dt).format());
+        console.log(queryWeatherURL + searchValue + imperialUnits + apiWeatherKey);
         if (history.indexOf(searchValue) === -1) {
           history.push(searchValue);
           window.localStorage.setItem("history", JSON.stringify(history));
@@ -84,17 +86,6 @@ function genForecastHTML(name, temp, humidity, speed) {
       return forecastWeather;
 }
 
-//getforecast variable to use ES6 w / upticks
-
- /*var forecastWeather = `<div class="card bg-light" style="width: 50px;">
-        <div class="card-body">
-          <h5 class="card-title">${data.city.name}</h5>
-          <p class="card-text">Temperature: ${data.list[0].main.temp}°F</p>
-          <p class="card-text">Humidity: ${data.list[0].main.humidity}%</p>
-          <p class="card-text">Wind Speed: ${data.list[0].wind.speed}MPH</p>
-        </div>
-      </div>`;*/
-
   function getForecast(searchValue) {
     var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
     $.ajax({
@@ -106,6 +97,9 @@ function genForecastHTML(name, temp, humidity, speed) {
         console.log("forecast works");
         console.log(data);
         console.log(data.list);
+        console.log(moment(data.list.dt).format());
+        console.log(forecastURL + searchValue + imperialUnits + apiWeatherKey);
+        
         
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
@@ -150,8 +144,8 @@ function genForecastHTML(name, temp, humidity, speed) {
         } else if (uvBtn >= 11) {
           uvBtn.addClass("extremely-high");
         }
-        $("#today .card-text").append(uv.append(uvBtn));
-        $("#forecast .card-text").append(uv.append(uvBtn));
+        $("#today .card-body").append(uv.append(uvBtn));
+        $("#forecast .card-body").append(uv.append(uvBtn));
       }
     });
   }
