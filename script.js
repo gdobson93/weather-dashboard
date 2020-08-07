@@ -42,6 +42,12 @@ $(document).ready(function() {
         console.log(data);
         console.log(moment(data.dt).format());
         console.log(queryWeatherURL + searchValue + imperialUnits + apiWeatherKey);
+
+        var currentDate = data.dt;
+				var todaysDate = new Date(currentDate * 1000);
+				var dateStr = todaysDate.toLocaleDateString();
+				console.log(dateStr);
+
         if (history.indexOf(searchValue) === -1) {
           history.push(searchValue);
           window.localStorage.setItem("history", JSON.stringify(history));
@@ -51,6 +57,8 @@ $(document).ready(function() {
         var currentWeather = `<div class="card bg-light" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">${data.name}</h5>
+          <p class="card-text">${dateStr}</p>
+          <img src="https://openweathermap.org/img/w/${data.weather.icon}.png">
           <p class="card-text">Temperature: ${data.main.temp}°F</p>
           <p class="card-text">Humidity: ${data.main.humidity}%</p>
           <p class="card-text">Wind Speed: ${data.wind.speed}MPH</p>
@@ -73,10 +81,12 @@ $(document).ready(function() {
  * @param {string} humidity 
  * @param {string} speed 
  */
-function genForecastHTML(name, temp, humidity, speed) {
+function genForecastHTML(name, fiveDateStr, icon, temp, humidity, speed) {
   var forecastWeather = `<div class="card-forecast bg-light" style="width: 20%;">
         <div class="card-body">
           <h5 class="card-title">${name}</h5>
+          <p class="card-text"> ${fiveDateStr} </p>
+          <img src="https://openweathermap.org/img/w/${icon}.png">
           <p class="card-text">Temperature: ${temp}°F</p>
           <p class="card-text">Humidity: ${humidity}%</p>
           <p class="card-text">Wind Speed: ${speed}MPH</p>
@@ -108,7 +118,12 @@ function genForecastHTML(name, temp, humidity, speed) {
             // create html elements for a bootstrap card
             console.log(data);
 
-            var fiveDayForecast = genForecastHTML(data.city.name, data.list[0].main.temp, data.list[0].main.humidity, data.list[0].wind.speed);
+            var fiveSec = data.list[i].dt;
+						var fiveForecastDate = new Date(fiveSec * 1000);
+						var fiveDateStr = fiveForecastDate.toLocaleDateString();
+						console.log(fiveDateStr);
+
+            var fiveDayForecast = genForecastHTML(data.city.name, fiveDateStr, data.list[i].main.temp, data.list[i].main.humidity, data.list[i].wind.speed);
 
       $("#forecast").append(fiveDayForecast);
           }
